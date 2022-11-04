@@ -12,6 +12,14 @@ class Cuestionario(models.Model):
         Sector, on_delete=models.CASCADE, verbose_name='sector'
     )
 
+    class Meta:
+
+        verbose_name = 'Cuestionario'
+        verbose_name_plural = 'Cuestionarios'
+
+    def __str__(self):
+        return self.consorcio
+
 
 class Pregunta(models.Model):
 

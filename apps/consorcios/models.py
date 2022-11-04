@@ -4,7 +4,8 @@ from django.db import models
 class Consorcio(models.Model):
 
     nombre = models.CharField(
-        'Consorcio', max_length=255)
+        'Consorcio', max_length=255
+    )
 
     class Meta:
 
@@ -20,10 +21,12 @@ class Sector(models.Model):
     consorcio = models.ForeignKey(
         Consorcio, on_delete=models.CASCADE, verbose_name='consorcio')
     nombre = models.CharField(
-        'Sector', max_length=255)
+        'Sector', max_length=255
+    )
 
     class Meta:
 
+        unique_together = ['consorcio', 'nombre']
         verbose_name = 'Sector'
         verbose_name_plural = 'Sectores'
 

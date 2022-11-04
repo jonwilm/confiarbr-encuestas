@@ -101,9 +101,7 @@ package-lock.json
 
 
 # Migraciones
-applications/livececilia/migrations/*
-applications/newsletter/migrations/*
-applications/sorteo/migrations/*
+**/migrations/*
 
 # confuguracion
 .vscode
