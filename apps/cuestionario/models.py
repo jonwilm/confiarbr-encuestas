@@ -1,5 +1,4 @@
 from django.db import models
-from smart_selects.db_fields import ChainedForeignKey
 
 from apps.consorcios.models import Consorcio, Sector
 
@@ -9,21 +8,9 @@ class Cuestionario(models.Model):
     consorcio = models.ForeignKey(
         Consorcio, on_delete=models.CASCADE, verbose_name='consorcio'
     )
-    sector = ChainedForeignKey(
-        Sector,
-        chained_field="consorcio",
-        chained_model_field="consorcio",
-        show_all=False,
-        auto_choose=True,
-        sort=True,
-        on_delete=models.CASCADE,
-        verbose_name='sector'
+    sector = models.ForeignKey(
+        Sector, on_delete=models.CASCADE, verbose_name='sector'
     )
-
-    class Meta:
-
-        verbose_name = 'Cuestionario'
-        verbose_name_plural = 'Cuestionarios'
 
 
 class Pregunta(models.Model):
