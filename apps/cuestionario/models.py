@@ -17,9 +17,6 @@ class Cuestionario(models.Model):
         verbose_name = 'Cuestionario'
         verbose_name_plural = 'Cuestionarios'
 
-    def __str__(self):
-        return self.consorcio
-
 
 class Pregunta(models.Model):
 
