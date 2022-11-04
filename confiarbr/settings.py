@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'nested_admin',
+    'smart_selects',
 
     'apps.consorcios',
     'apps.cuestionario',
@@ -148,3 +149,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+USE_DJANGO_JQUERY = True
