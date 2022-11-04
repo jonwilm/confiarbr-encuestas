@@ -27,7 +27,7 @@ DEBUG = True
 
 # Production
 # -------------------------------------
-ALLOWED_HOSTS = ['confiarbr.com.ar']
+ALLOWED_HOSTS = ['encuestas.confiarbr.com.ar', 'panel.confiarbr.com.ar']
 
 # Local
 # -------------------------------------
