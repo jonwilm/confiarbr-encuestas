@@ -1,4 +1,5 @@
 from django.db import models
+from smart_selects.db_fields import ChainedForeignKey
 
 from apps.consorcios.models import Consorcio, Sector
 
@@ -8,9 +9,24 @@ class Cuestionario(models.Model):
     consorcio = models.ForeignKey(
         Consorcio, on_delete=models.CASCADE, verbose_name='consorcio'
     )
-    sector = models.ForeignKey(
-        Sector, on_delete=models.CASCADE, verbose_name='sector'
+    sector = ChainedForeignKey(
+        Sector,
+        chained_field="consorcio",
+        chained_model_field="consorcio",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.CASCADE,
+        verbose_name='sector'
     )
+
+    class Meta:
+
+        verbose_name = 'Cuestionario'
+        verbose_name_plural = 'Cuestionarios'
+
+    def __str__(self):
+        return str(self.consorcio) + ' - ' + str(self.sector)
 
 
 class Pregunta(models.Model):
@@ -20,6 +36,12 @@ class Pregunta(models.Model):
     )
     pregunta = models.CharField(
         'Pregunta', max_length=255
+    )
+    text_informe_prev = models.CharField(
+        'Texto para informe (Prev. Si/No)', max_length=255, help_text='(se puede observar que tal area)'
+    )
+    text_informe_post = models.CharField(
+        'Texto para informe (Post. Si/No', max_length=255, help_text='(se encuentran en buen estado)'
     )
     estado = models.BooleanField(
         'Activa', default=True
@@ -37,6 +59,22 @@ class Pregunta(models.Model):
         return self.pregunta
 
 
+class Reporte(models.Model):
+
+    estado = models.BooleanField(
+        'Finalizado', default=False
+    )
+    archivo = models.FileField(
+        'Archivo de reporte', upload_to='media/reportes', blank=True, null=True
+    )
+    creacion = models.DateTimeField(
+        'Fecha de creación', auto_now_add=True
+    )
+    actualizacion = models.DateTimeField(
+        'Fecha de Actualización', auto_now=True
+    )
+
+
 RESPUESTA_CHOICES = [
     ('S', 'SI'),
     ('N', 'NO')
@@ -48,10 +86,11 @@ class Respuesta(models.Model):
         Pregunta, on_delete=models.CASCADE, verbose_name='pregunta'
     )
     respuesta = models.CharField(
-        'Respuesta', max_length=2, choices=RESPUESTA_CHOICES, blank=True, null=True
+        'Respuesta', max_length=2, choices=RESPUESTA_CHOICES
     )
     observaciones = models.TextField(
-        'Observaciones', blank=True, null=True)
+        'Observaciones', blank=True, null=True
+    )
 
     class Meta:
 
