@@ -11,7 +11,7 @@ class ConsorcioAdmin(admin.ModelAdmin):
 
 class SectorAdmin(admin.ModelAdmin):
 
-    list_display = ('nombre', 'consorcio',)
+    list_display = ( 'consorcio', 'nombre',)
     search_fields = ('consorcio', 'nombre',)
     list_filter = ('consorcio',)
     ordering = ('consorcio', 'nombre')

@@ -11,7 +11,8 @@ class PreguntaAdmin(admin.StackedInline):
 
 class CuestionarioAdmin(admin.ModelAdmin):
     inlines = (PreguntaAdmin,)
-    list_display = ('consorcio', 'sector',)
+    list_display = ('nombre',)
+    exclude = ('nombre',)
     list_filter = ('consorcio',)
     ordering = ('consorcio',)
 

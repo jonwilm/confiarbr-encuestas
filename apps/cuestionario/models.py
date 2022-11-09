@@ -6,6 +6,9 @@ from apps.consorcios.models import Consorcio, Sector
 
 class Cuestionario(models.Model):
 
+    nombre = models.CharField(
+        'Cuestionario', max_length=255
+    )
     consorcio = models.ForeignKey(
         Consorcio, on_delete=models.CASCADE, verbose_name='consorcio'
     )
@@ -25,8 +28,14 @@ class Cuestionario(models.Model):
         verbose_name = 'Cuestionario'
         verbose_name_plural = 'Cuestionarios'
 
+    def save(self, *args, **kwargs):
+        super(Cuestionario, self).save(*args, **kwargs)
+        if not self.nombre:
+            self.nombre = str(self.consorcio) + ' - ' + str(self.sector)
+            self.save()
+
     def __str__(self):
-        return str(self.consorcio) + ' - ' + str(self.sector)
+        return self.nombre
 
 
 class Pregunta(models.Model):
@@ -98,7 +107,7 @@ class Respuesta(models.Model):
         verbose_name_plural = 'Respuestas'
 
     def __str__(self):
-        return self.respuesta
+        return str(self.pregunta.cuestionario)
 
 
 class ImagenRespuesta(models.Model):
