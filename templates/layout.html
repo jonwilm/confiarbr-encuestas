@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+  <title>{% block title %}{% endblock title %} | ConfiarBR</title>
+  
+  {% block stylesheet %}{% endblock stylesheet %}
+  
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  
+  {% block css %}{% endblock css %}
+  
+  {% block navbar %}{% endblock navbar %}
+  
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+  
+  <!-- scripts -->
+  <script src="{% static 'libs/bootstrap/js/bootstrap.bundle.js' %}"></script>
+  {% block js %}{% endblock js %}
+</body>
+</html>

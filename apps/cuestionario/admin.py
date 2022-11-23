@@ -1,7 +1,7 @@
 from django.contrib import admin
 # import nested_admin
 
-from apps.cuestionario.models import Cuestionario, Pregunta, Respuesta, ImagenRespuesta
+from apps.cuestionario.models import Cuestionario, Pregunta, Respuesta, ImagenRespuesta, Reporte
 
 
 class PreguntaAdmin(admin.StackedInline):
@@ -11,8 +11,8 @@ class PreguntaAdmin(admin.StackedInline):
 
 class CuestionarioAdmin(admin.ModelAdmin):
     inlines = (PreguntaAdmin,)
-    list_display = ('nombre',)
-    exclude = ('nombre',)
+    list_display = ('nombre', 'slug',)
+    exclude = ('nombre', 'slug',)
     list_filter = ('consorcio',)
     ordering = ('consorcio',)
 
@@ -24,11 +24,24 @@ class ImagenRespuestaAdmin(admin.StackedInline):
 
 class RespuestaAdmin(admin.ModelAdmin):
     inlines = (ImagenRespuestaAdmin,)
-    list_display = ('pregunta', 'respuesta',)
+    list_display = ('get_cuestionario', 'pregunta', 'respuesta',)
+
+    @admin.display(description='Cuestionario')
+    def get_cuestionario(self, obj):
+        return obj.pregunta.cuestionario
+
+
+class ReporteAdmin(admin.ModelAdmin):
+    list_display = ('creacion', 'id', 'consorcio', 'sector',)
+
+    @admin.display(description='Reporte')
+    def get_reporte(self, obj):
+        return obj.reporte
 
 
 admin.site.register(Cuestionario, CuestionarioAdmin)
 admin.site.register(Respuesta, RespuestaAdmin)
+admin.site.register(Reporte, ReporteAdmin)
 
 
 # class ImagenRespuestaAdmin(nested_admin.NestedStackedInline):

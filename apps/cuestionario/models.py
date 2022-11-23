@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 from smart_selects.db_fields import ChainedForeignKey
 
 from apps.consorcios.models import Consorcio, Sector
@@ -22,6 +23,9 @@ class Cuestionario(models.Model):
         on_delete=models.CASCADE,
         verbose_name='sector'
     )
+    slug = models.SlugField(
+        'Slug', max_length=255, blank=True, null=True
+    )
 
     class Meta:
 
@@ -29,10 +33,9 @@ class Cuestionario(models.Model):
         verbose_name_plural = 'Cuestionarios'
 
     def save(self, *args, **kwargs):
+        self.nombre = str(self.consorcio) + ' - ' + str(self.sector)
+        self.slug = slugify(self.consorcio) + '-' + slugify(self.sector)
         super(Cuestionario, self).save(*args, **kwargs)
-        if not self.nombre:
-            self.nombre = str(self.consorcio) + ' - ' + str(self.sector)
-            self.save()
 
     def __str__(self):
         return self.nombre
@@ -70,18 +73,39 @@ class Pregunta(models.Model):
 
 class Reporte(models.Model):
 
+    consorcio = models.ForeignKey(
+        Consorcio, on_delete=models.CASCADE, verbose_name='consorcio'
+    )
+    sector = ChainedForeignKey(
+        Sector,
+        chained_field="consorcio",
+        chained_model_field="consorcio",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.CASCADE,
+        verbose_name='sector'
+    )
     estado = models.BooleanField(
         'Finalizado', default=False
     )
     archivo = models.FileField(
         'Archivo de reporte', upload_to='media/reportes', blank=True, null=True
     )
-    creacion = models.DateTimeField(
+    creacion = models.DateField(
         'Fecha de creación', auto_now_add=True
     )
-    actualizacion = models.DateTimeField(
+    actualizacion = models.DateField(
         'Fecha de Actualización', auto_now=True
     )
+
+    class Meta:
+
+        verbose_name = 'Reporte'
+        verbose_name_plural = 'Reportes'
+
+    def __str__(self):
+        return str(self.consorcio) + '-' + str(self.creacion)
 
 
 RESPUESTA_CHOICES = [
@@ -91,6 +115,9 @@ RESPUESTA_CHOICES = [
 
 class Respuesta(models.Model):
 
+    # reporte = models.ForeignKey(
+    #     Reporte, on_delete=models.CASCADE, verbose_name='reporte'
+    # )
     pregunta = models.ForeignKey(
         Pregunta, on_delete=models.CASCADE, verbose_name='pregunta'
     )
