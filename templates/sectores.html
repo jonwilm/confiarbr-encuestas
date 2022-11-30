@@ -7,7 +7,8 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h1 class="text-center display-6 mb-5">{{ consorcio.nombre }}</h1>
+      <h6 class="text-center">Crear Reporte</h6>
+      <h1 class="text-center display-6 mb-3">{{ consorcio.nombre }}</h1>
     </div>
   </div>
   <div class="row">
@@ -16,7 +17,7 @@
         
         {% for s in sectores %}
   
-        <a href="{% url 'cuestionarios_app:cuestionario' s.slug %}" class="btn btn-outline-primary" type="button">{{ s }}</a>
+        <a href="{% url 'reportes_app:reporte' s.slug %}" class="btn btn-outline-primary" type="button">{{ s }}</a>
           
         {% endfor %}
           

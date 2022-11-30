@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Cuestionario{% endblock title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'libs/bs-stepper/bs-stepper.min.css' %}">
+{% endblock stylesheet %}
+
+{% block css %}
+<style>
+  .item {
+    border: 1px solid var(--bs-primary);
+    border-radius: 1rem;
+  }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 class="text-center display-6"><strong>Reporte</strong></h1>
+      <h3 class="text-center">{{ sector.consorcio }} - {{ sector.nombre }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+      <form action="" method="post">
+        {% csrf_token %}
+
+        {{ respuesta_formset.management_form }}
+
+        <div id="inputs_resp"></div>
+
+        <div class="d-grid gap-2 mt-3">
+          <button class="btn btn-primary" type="submit">Finalizar Reporte</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'libs/bs-stepper/bs-stepper.min.js' %}"></script>
+<script>
+  var preguntas = []
+  var preguntas_id = []
+  {% for p in preguntas %}
+  preguntas.push('{{ p }}')
+  preguntas_id.push('{{ p.id }}')
+  {% endfor %}
+
+  $('#id_form-TOTAL_FORMS').val(preguntas.length)
+  
+  for (let i = 0; i < preguntas.length; i++) {
+
+    inputs = `
+    <div class="item item-`+i+`-p mt-5 py-3 px-1">
+      <p id="id_pregunta-`+i+`" class=""><strong>`+preguntas[i]+`</strong></p>
+      <input type="hidden" name="form-`+i+`-pregunta" class="form-control disabled" id="id_form-`+i+`-pregunta" value="`+preguntas_id[i]+`">
+      <div class="mb-3">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="S">
+          <label class="form-check-label" for="id_form-`+i+`-respuesta">SI</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="N">
+          <label class="form-check-label" for="id_form-`+i+`-respuesta">NO</label>
+        </div>
+      </div>
+      <label for="id_form-`+i+`-observaciones"><strong>Observaciones</strong></label>
+      <textarea name="form-`+i+`-observaciones" rows="2" class="form-control" placeholder="Observaciones" style="resize: none;" id="id_form-`+i+`-observaciones"></textarea>
+    </div>
+    `
+    $('#inputs_resp').append(inputs)
+
+  }
+</script>
+{% endblock js %}

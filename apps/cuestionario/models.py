@@ -1,8 +1,11 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from smart_selects.db_fields import ChainedForeignKey
 
 from apps.consorcios.models import Consorcio, Sector
+
+import datetime
 
 
 class Cuestionario(models.Model):
@@ -61,95 +64,22 @@ class Pregunta(models.Model):
     time_prox_visita = models.IntegerField(
         'Proxima Visita en Días', default=1
     )
+    ultima_visita = models.DateField(
+        'Ultima Visita', blank=True, null=True
+    )
+    prox_visita = models.DateField(
+        'Proxima Visita', blank=True, null=True
+    )
 
     class Meta:
 
         verbose_name = 'Pregunta'
         verbose_name_plural = 'Preguntas'
 
+    def save(self, *args, **kwargs):
+        if self.ultima_visita:
+            self.prox_visita = self.ultima_visita + datetime.timedelta(days=self.time_prox_visita)
+        super(Pregunta, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.pregunta
-
-
-class Reporte(models.Model):
-
-    consorcio = models.ForeignKey(
-        Consorcio, on_delete=models.CASCADE, verbose_name='consorcio'
-    )
-    sector = ChainedForeignKey(
-        Sector,
-        chained_field="consorcio",
-        chained_model_field="consorcio",
-        show_all=False,
-        auto_choose=True,
-        sort=True,
-        on_delete=models.CASCADE,
-        verbose_name='sector'
-    )
-    estado = models.BooleanField(
-        'Finalizado', default=False
-    )
-    archivo = models.FileField(
-        'Archivo de reporte', upload_to='media/reportes', blank=True, null=True
-    )
-    creacion = models.DateField(
-        'Fecha de creación', auto_now_add=True
-    )
-    actualizacion = models.DateField(
-        'Fecha de Actualización', auto_now=True
-    )
-
-    class Meta:
-
-        verbose_name = 'Reporte'
-        verbose_name_plural = 'Reportes'
-
-    def __str__(self):
-        return str(self.consorcio) + '-' + str(self.creacion)
-
-
-RESPUESTA_CHOICES = [
-    ('S', 'SI'),
-    ('N', 'NO')
-]
-
-class Respuesta(models.Model):
-
-    # reporte = models.ForeignKey(
-    #     Reporte, on_delete=models.CASCADE, verbose_name='reporte'
-    # )
-    pregunta = models.ForeignKey(
-        Pregunta, on_delete=models.CASCADE, verbose_name='pregunta'
-    )
-    respuesta = models.CharField(
-        'Respuesta', max_length=2, choices=RESPUESTA_CHOICES
-    )
-    observaciones = models.TextField(
-        'Observaciones', blank=True, null=True
-    )
-
-    class Meta:
-
-        verbose_name = 'Respuesta'
-        verbose_name_plural = 'Respuestas'
-
-    def __str__(self):
-        return str(self.pregunta.cuestionario)
-
-
-class ImagenRespuesta(models.Model):
-
-    respuesta = models.ForeignKey(
-        Respuesta, on_delete=models.CASCADE, verbose_name='respuesta'
-    )
-    imagen = models.ImageField(
-        'Imagen', upload_to='media/img-respuesta', blank=True, null=True
-    )
-
-    class Meta:
-
-        verbose_name = 'Imagen Respuesta'
-        verbose_name_plural = 'Imagenes respuestas'
-
-    def __str__(self):
-        return self.imagen

@@ -1,7 +1,13 @@
 from django import forms
 from django.forms import modelformset_factory
 
-from .models import Respuesta
+from .models import Reporte, Respuesta
+
+
+class ReporteForm(forms.ModelForm):
+    class Meta:
+        model = Reporte
+        fields = []
 
 
 class RespuestaForm(forms.ModelForm):
@@ -13,7 +19,11 @@ class RespuestaForm(forms.ModelForm):
             'observaciones',
         ]
         widgets = {
-            # 'pregunta': forms.HiddenInput(),
+            'pregunta': forms.HiddenInput(
+                attrs={
+                    'class': 'form-control disabled',
+                }
+            ),
             'respuesta': forms.Select(
                 attrs={
                     'class': 'form-select',
@@ -33,4 +43,5 @@ class RespuestaForm(forms.ModelForm):
 RespuestaFormSet = modelformset_factory(
     Respuesta,
     form=RespuestaForm,
+    extra=0,
 )

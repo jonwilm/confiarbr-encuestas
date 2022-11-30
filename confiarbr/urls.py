@@ -9,5 +9,5 @@ urlpatterns = [
     path('chaining/', include('smart_selects.urls')),
 
     path('', include('apps.consorcios.urls')),
-    path('', include('apps.cuestionario.urls')),
+    path('', include('apps.reportes.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
