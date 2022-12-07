@@ -6,12 +6,12 @@ app_name = "consorcios_app"
 
 urlpatterns = [
     path(
-        'consorcios',
+        'crear-reporte/consorcios',
         views.Consorcios.as_view(),
         name='consorcios-list',
     ),
     path(
-        'consorcios/<slug:slug>',
+        'crear-reporte/<slug:slug>',
         views.Sectores.as_view(),
         name='sectores-list',
     ),

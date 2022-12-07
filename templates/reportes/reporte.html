@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Reporte</title>
+  <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
+  <style>
+    @page {
+      size: "A4";
+      margin: 1.0cm 1.5cm 3.5cm 1.5cm;
+    }
+    body {
+      width: 100% !important;
+      height: 100%;
+      background: #fff;
+      color: black;
+      font-size: 100%;
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: none; 
+    }
+    p {
+      margin: 0;
+    }    
+  </style>
+</head>
+<body>
+  <main class="container py-5">
+    <p class="text-end">Señores</p>
+    <p class="text-end"><strong>{{ reporte.consorcio }}</strong></p>
+    <p class="text-end mb-5">PRESENTE</p>
+    
+    <h1 class="text-center text-uppercase text-white py-3 mb-5" style="background-color: steelblue;">Informe visita del día<br>{{ reporte.creacion|date:'j \d\e F \d\e Y' }}</h1>
+    
+    <p class="text-end mb-3">Buenos Aires, {{ reporte.creacion|date:'j \d\e F \d\e Y' }}</p>
+    
+    <p class="mb-3">Nos complace dirigirnos a usted a fin de poner a consideración el informe de la visita realizada el dia {{ reporte.creacion|date:'j \d\e F \d\e Y' }}</p>
+    
+    <p class="mb-3"><strong>Sector {{ reporte.sector }}</strong></p>
+    
+    <ul>
+      {% for resp in respuestas %}
+      <li>
+        {{ resp.pregunta.text_informe_prev }} 
+        
+        {% if resp.respuesta == 'NO' %}
+        {{ resp.respuesta }}
+        {% endif %}
+        
+        {{ resp.pregunta.text_informe_post }}
+      </li>
+      {% endfor %}
+    </ul>
+    
+    <p class="mb-3"><strong>Observaciones</strong></p>
+    {% for resp in respuestas %}
+    <p class="mb-3">
+      {{ resp.observaciones }}
+    </p>
+    {% endfor %}
+    
+    <!-- <p class="mb-3"><strong>Imagenes</strong></p>
+    {% for resp in respuestas %}
+    <div class="row">
+      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
+        {% if resp.imagen1 %}
+        <img class="img-fluid" src="{{ resp.imagen1.url }}" alt="">
+        {% endif %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
+        {% if resp.imagen2 %}
+        <img class="img-fluid" src="{{ resp.imagen2.url }}" alt="">
+        {% endif %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
+        {% if resp.imagen3 %}
+        <img class="img-fluid" src="{{ resp.imagen3.url }}" alt="">
+        {% endif %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
+        {% if resp.imagen4 %}
+        <img class="img-fluid" src="{{ resp.imagen4.url }}" alt="">
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %} -->
+  </main>
+</body>
+</html>

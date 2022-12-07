@@ -12,12 +12,13 @@ class ImagenRespuestaAdmin(nested_admin.NestedStackedInline):
 class RespuestaAdmin(nested_admin.NestedStackedInline):
     model = Respuesta
     extra = 0
-    inlines = (ImagenRespuestaAdmin,)
+    # inlines = (ImagenRespuestaAdmin,)
 
 
 class ReporteAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('nombre', 'creacion', 'consorcio', 'sector',)
+    list_display = ('creacion', 'consorcio', 'sector',)
     exclude = ('nombre', 'slug',)
+    list_filter = ('consorcio',)
     inlines = (RespuestaAdmin,)
 
     @admin.display(description='Reporte')

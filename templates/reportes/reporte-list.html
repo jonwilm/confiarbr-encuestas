@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Reportes{% endblock title %}
+
+{% block stylesheet %}
+
+{% endblock stylesheet %}
+
+{% block css %}
+<style>
+  
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 class="text-center display-6 mb-3">{{ consorcio.nombre }}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+      <div class="d-grid gap-2">
+        
+        
+        {% if reportes|length == 0 %}
+        <div class="alert alert-info text-center">
+          No hay reportes para este consorcio.
+        </div>
+        {% endif %}        
+        
+        {% for r in reportes %}
+        
+        <!-- url 'reportes_app:reporte-sectores' slug=consorcio.slug date=r -->
+        <a href="{% url 'reportes_app:reporte-sectores' slug=consorcio.slug date=r %}" class="btn btn-outline-primary" type="button">Reporte {{ r|date:'d-M-Y' }}</a>
+        
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+
+{% endblock js %}

@@ -30,11 +30,19 @@
         {% csrf_token %}
 
         {{ respuesta_formset.management_form }}
+        {{ imagen_respuesta_formset.management_form }}
 
         <div id="inputs_resp"></div>
 
-        <div class="d-grid gap-2 mt-3">
-          <button class="btn btn-primary" type="submit">Finalizar Reporte</button>
+        <div id="no-q" class="alert alert-info text-center d-none">
+          No hay preguntas activas para este sector en esta fecha.
+          <br>
+          <br>
+          Contacte al administrador.
+        </div>
+
+        <div id="btn-guardar" class="d-grid gap-2 mt-3">
+          <button class="btn btn-primary" type="submit">Guardar</button>
         </div>
       </form>
     </div>
@@ -52,12 +60,17 @@
   preguntas_id.push('{{ p.id }}')
   {% endfor %}
 
+  if (preguntas.length == 0) {
+    $('#no-q').removeClass('d-none')
+    $('#btn-guardar').addClass('d-none')
+  }
+
   $('#id_form-TOTAL_FORMS').val(preguntas.length)
   
   for (let i = 0; i < preguntas.length; i++) {
 
-    inputs = `
-    <div class="item item-`+i+`-p mt-5 py-3 px-1">
+    var inputs = `
+    <div id="item-`+i+`" class="item item-`+i+`-p mt-5 py-3 px-3">
       <p id="id_pregunta-`+i+`" class=""><strong>`+preguntas[i]+`</strong></p>
       <input type="hidden" name="form-`+i+`-pregunta" class="form-control disabled" id="id_form-`+i+`-pregunta" value="`+preguntas_id[i]+`">
       <div class="mb-3">
@@ -72,10 +85,18 @@
       </div>
       <label for="id_form-`+i+`-observaciones"><strong>Observaciones</strong></label>
       <textarea name="form-`+i+`-observaciones" rows="2" class="form-control" placeholder="Observaciones" style="resize: none;" id="id_form-`+i+`-observaciones"></textarea>
+      
+      <div id="imgfile-`+i+`-0" class="imgfile imgfile-`+i+`-p py-3 px-1">
+        <input type="hidden" name="imagenrespuesta_set-`+i+`-respuesta" id="id_imagenrespuesta_set-`+i+`-respuesta">
+        <p class="mb-3"><strong>Imagen(es)</strong></p>
+        <input type="file" name="imagenrespuesta_set-`+i+`-imagen" class="form-control" accept="image/*" id="id_imagenrespuesta_set-`+i+`-imagen">
+      </div>
     </div>
     `
     $('#inputs_resp').append(inputs)
 
   }
+
+  $('#id_imagenrespuesta_set-TOTAL_FORMS').val($('.imgfile').length)
 </script>
 {% endblock js %}

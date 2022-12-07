@@ -53,10 +53,10 @@ class Pregunta(models.Model):
         'Pregunta', max_length=255
     )
     text_informe_prev = models.CharField(
-        'Texto para informe (Prev. Si/No)', max_length=255, help_text='(se puede observar que tal area)'
+        'Texto para informe (Prev. Si/No)', max_length=255, help_text='(se puede observar que tal area)', blank=True, null=True
     )
     text_informe_post = models.CharField(
-        'Texto para informe (Post. Si/No', max_length=255, help_text='(se encuentran en buen estado)'
+        'Texto para informe (Post. Si/No', max_length=255, help_text='(se encuentran en buen estado)', blank=True, null=True
     )
     estado = models.BooleanField(
         'Activa', default=True

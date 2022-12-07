@@ -1,0 +1,167 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Cuestionario{% endblock title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'libs/bs-stepper/bs-stepper.min.css' %}">
+{% endblock stylesheet %}
+
+{% block css %}
+<style>
+  .item {
+    border: 1px solid var(--bs-primary);
+    border-radius: 1rem;
+  }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h6 class="text-center">Crear Reporte</h6>
+      <h3 class="text-center">{{ sector.consorcio }} - {{ sector.nombre }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+      <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+
+        {{ respuesta_formset.management_form }}
+
+        <div id="inputs_resp"></div>
+
+        <div id="no-q" class="alert alert-info text-center d-none">
+          No hay preguntas activas para este sector en esta fecha.
+          <br>
+          <br>
+          Contacte al administrador.
+        </div>
+
+        <div class="d-flex">
+          <a id="btn-prev" class="btn btn-primary btn-sm mt-3 me-auto d-none" onclick="prevQuestion()">Anterior</a>
+          <a id="btn-next" class="btn btn-primary btn-sm mt-3 ms-auto d-none" onclick="nextQuestion()">Siguiente</a>
+        </div>
+
+        <div id="btn-guardar" class="d-grid gap-2 mt-3">
+          <button class="btn btn-primary d-none" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'libs/bs-stepper/bs-stepper.min.js' %}"></script>
+<script>
+  var preguntas = []
+  var preguntas_id = []
+  {% for p in preguntas %}
+  preguntas.push('{{ p }}')
+  preguntas_id.push('{{ p.id }}')
+  {% endfor %}
+
+  if (preguntas.length == 0) {
+    $('#no-q').removeClass('d-none')
+    $('#btn-guardar').addClass('d-none')
+  }
+
+  $('#id_form-TOTAL_FORMS').val(preguntas.length)
+  
+  for (let i = 0; i < preguntas.length; i++) {
+
+    var inputs = `
+    <div id="item-`+i+`" class="item item-`+i+`-p mt-5 py-3 px-3">
+      <p id="id_pregunta-`+i+`" class=""><strong>`+preguntas[i]+`</strong></p>
+      <input type="hidden" name="form-`+i+`-pregunta" class="form-control disabled" id="id_form-`+i+`-pregunta" value="`+preguntas_id[i]+`">
+      <div class="mb-3">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="S">
+          <label class="form-check-label" for="id_form-`+i+`-respuesta">SI</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="N">
+          <label class="form-check-label" for="id_form-`+i+`-respuesta">NO</label>
+        </div>
+      </div>
+      <label for="id_form-`+i+`-observaciones"><strong>Observaciones</strong></label>
+      <textarea name="form-`+i+`-observaciones" rows="2" class="form-control" placeholder="Observaciones" style="resize: none;" id="id_form-`+i+`-observaciones"></textarea>
+      <p class="my-3"><strong>Imagen(es)</strong></p>
+      <div class="content-imgfile">
+        <input type="file" capture="camera" name="form-`+i+`-imagen1" class="imgfile1 form-control" accept="image/*" id="id_form-`+i+`-imagen1">
+        <input type="file" capture="camera" name="form-`+i+`-imagen2" class="imgfile2 form-control d-none" accept="image/*" id="id_form-`+i+`-imagen2">
+        <input type="file" capture="camera" name="form-`+i+`-imagen3" class="imgfile3 form-control d-none" accept="image/*" id="id_form-`+i+`-imagen3">
+        <input type="file" capture="camera" name="form-`+i+`-imagen4" class="imgfile4 form-control d-none" accept="image/*" id="id_form-`+i+`-imagen4">
+      </div>
+      <div class="text-end">
+        <a class="btn btn-primary btn-sm mt-3 ms-auto" onclick="addImg(this)">Agregar imagen</a>
+      </div>
+    </div>
+    `
+    $('#inputs_resp').append(inputs)
+
+  }
+
+  function addImg(elem) {
+    var totalImgfile = $(elem).parents().siblings('.content-imgfile').children('input')
+    var noImgfile = $(elem).parents().siblings('.content-imgfile').children('input.d-none')
+    var nextImgfile = $(totalImgfile).length - $(noImgfile).length + 1
+    $(elem).parents().siblings('.content-imgfile').children('input.imgfile'+nextImgfile+'').removeClass('d-none')
+    if (nextImgfile == totalImgfile.length) {
+      $(elem).addClass('d-none')
+    }
+  }
+
+  if ($('.item').length == 0) {
+    $('#btn-prev').addClass('d-none')
+    $('#btn-next').addClass('d-none')
+    $('#btn-guardar button').addClass('d-none')
+  }
+  if ($('.item').length == 1) {
+    $('#btn-prev').addClass('d-none')
+    $('#btn-next').addClass('d-none')
+    $('#btn-guardar button').removeClass('d-none')
+  }
+  if ($('.item').length > 1) {
+    $('#btn-prev').addClass('d-none')
+    $('#btn-next').removeClass('d-none')
+    $('#btn-guardar button').addClass('d-none')
+  }
+
+  $('.item').addClass('d-none')
+  $('.item-0-p').removeClass('d-none')
+  var preguntaActual = 0
+  
+  function prevQuestion() {
+    preguntaActual = preguntaActual - 1
+    $('.item').addClass('d-none')
+    $('.item-'+preguntaActual+'-p').removeClass('d-none')
+    if (preguntaActual == 0) {
+      $('#btn-prev').addClass('d-none')
+      $('#btn-next').removeClass('d-none')
+      $('#btn-guardar button').removeClass('d-none')
+    }
+    if (preguntaActual < preguntas.length) {
+      $('#btn-next').removeClass('d-none')
+      $('#btn-guardar button').addClass('d-none')
+    }
+  }
+  
+  function nextQuestion() {
+    preguntaActual = preguntaActual + 1
+    $('.item').addClass('d-none')
+    $('.item-'+preguntaActual+'-p').removeClass('d-none')
+    if (preguntaActual == preguntas.length - 1) {
+      $('#btn-next').addClass('d-none')
+      $('#btn-guardar button').removeClass('d-none')
+    }
+    if (preguntaActual > 0) {
+      $('#btn-prev').removeClass('d-none')
+    }
+  }
+
+</script>
+{% endblock js %}

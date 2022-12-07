@@ -51,8 +51,8 @@ class Reporte(models.Model):
 
 
 RESPUESTA_CHOICES = [
-    ('S', 'SI'),
-    ('N', 'NO')
+    ('SI', 'SI'),
+    ('NO', 'NO')
 ]
 
 
@@ -69,6 +69,18 @@ class Respuesta(models.Model):
     )
     observaciones = models.TextField(
         'Observaciones', blank=True, null=True
+    )
+    imagen1 = models.ImageField(
+        'Imagen 1', upload_to='media/img-respuesta', blank=True, null=True
+    )
+    imagen2 = models.ImageField(
+        'Imagen 2', upload_to='media/img-respuesta', blank=True, null=True
+    )
+    imagen3 = models.ImageField(
+        'Imagen 3', upload_to='media/img-respuesta', blank=True, null=True
+    )
+    imagen4 = models.ImageField(
+        'Imagen 4', upload_to='media/img-respuesta', blank=True, null=True
     )
 
     class Meta:
