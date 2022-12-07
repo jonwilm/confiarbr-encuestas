@@ -2,7 +2,7 @@ info_local.txt
 media/
 
 # base de datos
-db.sqlite3
+# db.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -96,7 +96,7 @@ ENV/
 # js
 node_modules/
 package-lock.json
-*.sqlite
+# *.sqlite
 # *.sqlite3
 
 
