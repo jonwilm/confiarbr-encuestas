@@ -1,8 +1,16 @@
 from django.contrib import admin
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 from apps.consorcios.models import Consorcio, Sector
 
 
-class ConsorcioAdmin(admin.ModelAdmin):
+class ConsorcioResource(resources.ModelResource):
+
+    class Meta:
+        model = Consorcio
+
+
+class ConsorcioAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     list_display = ('nombre', 'slug')
     exclude = ('slug',)
