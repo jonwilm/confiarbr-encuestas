@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Reporte</title>
+  <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
+  <style>
+    @page {
+      size: "A4";
+      margin: 1.0cm 1.5cm 3.5cm 1.5cm;
+    }
+    body {
+      width: 100% !important;
+      height: 100%;
+      background: #fff;
+      color: black;
+      font-size: 100%;
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: none; 
+    }
+    p {
+      margin: 0;
+    }    
+  </style>
+</head>
+<body>
+  <main class="container py-5">
+    <p class="text-end">Señores</p>
+    <p class="text-end"><strong>{{ consorcio.nombre }}</strong></p>
+    <p class="text-end mb-5">PRESENTE</p>
+    
+    <h2 class="text-center text-uppercase rounded bg-primary bg-gradient text-white p-3 mb-5">Informe de visita<br>{{ fecha|date:'j \d\e F \d\e Y' }}</h2>
+    
+    <p class="text-end mb-3">Buenos Aires, {{ fecha|date:'j \d\e F \d\e Y' }}</p>
+    
+    <p class="mb-3">Nos complace dirigirnos a usted a fin de poner a consideración el informe de la visita realizada el dia {{ fecha|date:'j \d\e F \d\e Y' }}</p>
+    
+    <div id="content">
+      
+      
+    </div>
+  </main>
+  <script src="{% static 'libs/jquery/jquery-3.6.1.min.js' %}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var protocol = window.location.protocol
+      var host = window.location.host
+      {% for r in reportes %}
+        $('#content').append('<div id="{{r.sector|lower|cut:" "}}"></div>')
+        var url = protocol+'//'+host+'/reportes/{{r.sector.slug}}-{{fecha|date:"Y-m-d"}}/reporte'
+        $('#{{r.sector|lower|cut:" "}}').load(url+' #report-{{r.sector|lower|cut:" "}}');
+      {% endfor %}
+    });
+  </script>
+</body>
+</html>

@@ -35,60 +35,68 @@
     <p class="text-end"><strong>{{ reporte.consorcio }}</strong></p>
     <p class="text-end mb-5">PRESENTE</p>
     
-    <h1 class="text-center text-uppercase text-white py-3 mb-5" style="background-color: steelblue;">Informe visita del día<br>{{ reporte.creacion|date:'j \d\e F \d\e Y' }}</h1>
+    <h2 class="text-center text-uppercase rounded bg-primary bg-gradient text-white p-3 mb-5">Informe de visita<br>{{ reporte.creacion|date:'j \d\e F \d\e Y' }}</h2>
     
     <p class="text-end mb-3">Buenos Aires, {{ reporte.creacion|date:'j \d\e F \d\e Y' }}</p>
     
     <p class="mb-3">Nos complace dirigirnos a usted a fin de poner a consideración el informe de la visita realizada el dia {{ reporte.creacion|date:'j \d\e F \d\e Y' }}</p>
     
-    <p class="mb-3"><strong>Sector {{ reporte.sector }}</strong></p>
-    
-    <ul>
-      {% for resp in respuestas %}
-      <li>
-        {{ resp.pregunta.text_informe_prev }} 
-        
-        {% if resp.respuesta == 'NO' %}
-        {{ resp.respuesta }}
-        {% endif %}
-        
-        {{ resp.pregunta.text_informe_post }}
-      </li>
-      {% endfor %}
-    </ul>
-    
-    <p class="mb-3"><strong>Observaciones</strong></p>
-    {% for resp in respuestas %}
-    <p class="mb-3">
-      {{ resp.observaciones }}
-    </p>
-    {% endfor %}
-    
-    <!-- <p class="mb-3"><strong>Imagenes</strong></p>
-    {% for resp in respuestas %}
-    <div class="row">
-      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
-        {% if resp.imagen1 %}
-        <img class="img-fluid" src="{{ resp.imagen1.url }}" alt="">
-        {% endif %}
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
-        {% if resp.imagen2 %}
-        <img class="img-fluid" src="{{ resp.imagen2.url }}" alt="">
-        {% endif %}
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
-        {% if resp.imagen3 %}
-        <img class="img-fluid" src="{{ resp.imagen3.url }}" alt="">
-        {% endif %}
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 p-1 border">
-        {% if resp.imagen4 %}
-        <img class="img-fluid" src="{{ resp.imagen4.url }}" alt="">
-        {% endif %}
+    <div id="report-{{ reporte.sector|lower|cut:' ' }}">
+      
+      <p class="mb-3 bg-secondary bg-opacity-50 rounded p-3"><strong>Sector {{ reporte.sector }}</strong></p>
+      
+      <ul>
+        {% for resp in respuestas %}
+        <li>
+          
+          {% if resp.pregunta.text_informe_prev %}{{ resp.pregunta.text_informe_prev }}{% endif %}
+          
+          {% if resp.respuesta == 'NO' %}
+          <strong>{{ resp.respuesta }}</strong>
+          {% endif %}
+          
+          {% if resp.pregunta.text_informe_post %}{{ resp.pregunta.text_informe_post }}{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      
+      <div class="px-3">
+        <p class="mb-3"><strong>Comentarios</strong></p>
+        {% for resp in respuestas %}
+        <p class="mb-3">
+          {{ resp.observaciones }}
+        </p>
+        {% endfor %}
       </div>
     </div>
-    {% endfor %} -->
+    
+    <div class="px-3">
+      <p class="mb-3"><strong>Imagenes</strong></p>
+      {% for resp in respuestas %}
+      <div class="row">
+        <div class="col-6 col-lg-3 p-1">
+          {% if resp.imagen1 %}
+          <img class="img-fluid" src="{{ resp.imagen1.url }}" alt="">
+          {% endif %}
+        </div>
+        <div class="col-6 col-lg-3 p-1">
+          {% if resp.imagen2 %}
+          <img class="img-fluid" src="{{ resp.imagen2.url }}" alt="">
+          {% endif %}
+        </div>
+        <div class="col-6 col-lg-3 p-1">
+          {% if resp.imagen3 %}
+          <img class="img-fluid" src="{{ resp.imagen3.url }}" alt="">
+          {% endif %}
+        </div>
+        <div class="col-6 col-lg-3 p-1">
+          {% if resp.imagen4 %}
+          <img class="img-fluid" src="{{ resp.imagen4.url }}" alt="">
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </main>
 </body>
 </html>

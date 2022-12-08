@@ -145,6 +145,24 @@ class ReporteDetail(DetailView):
         return context
 
 
+class ReporteFull(TemplateView):
+    template_name = 'reportes/reporte-full.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        consorcio = Consorcio.objects.get(slug=kwargs['slug'])
+        reportes = Reporte.objects.filter(
+            consorcio=consorcio,
+            creacion=kwargs['date'],
+        )
+        context = {
+            'consorcio': consorcio,
+            'reportes': reportes,
+            'fecha': reportes[0].creacion,
+        }
+        return context
+
+
 # class ReporteDetail(TemplateView):
 #     template_name = "reportes/reporte.html"
 

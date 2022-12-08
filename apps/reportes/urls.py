@@ -30,6 +30,11 @@ urlpatterns = [
         views.ReporteDetail.as_view(),
         name='reporte',
     ),
+    path(
+        'reportes/<str:slug>/<str:date>/reporte',
+        views.ReporteFull.as_view(),
+        name='reporte-full',
+    ),
     # path(
     #     'reportes/<str:slug>/<str:date>/',
     #     views.ReporteDetail.as_view(),
