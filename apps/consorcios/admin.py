@@ -18,7 +18,13 @@ class ConsorcioAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ('nombre',)
 
 
-class SectorAdmin(admin.ModelAdmin):
+class SectorResource(resources.ModelResource):
+
+    class Meta:
+        model = Sector
+
+
+class SectorAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     list_display = ('consorcio', 'nombre', 'slug',)
     exclude = ('slug',)
