@@ -123,18 +123,22 @@ class ReporteUnidadView(CreateView):
         )
 
     def form_valid(self, form, unidad_formset, sector):
-        getReporte = Reporte.objects.get(
+        if Reporte.objects.filter(
             consorcio=sector.consorcio,
             sector=sector,
             creacion=date.today(),
-        )
-        if not getReporte:
+        ).exists():
+            getReporte = Reporte.objects.get(
+                consorcio=sector.consorcio,
+                sector=sector,
+                creacion=date.today(),
+            )
+            reporte = getReporte
+        else:
             reporte = form.save(commit=False)
             reporte.consorcio = sector.consorcio
             reporte.sector = sector
             reporte.save()
-        else:
-            reporte = getReporte
         instancesUnit = unidad_formset.save(commit=False)
         for instanceUnit in instancesUnit:
             if instanceUnit.unidad != None:
