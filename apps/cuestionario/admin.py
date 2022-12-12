@@ -31,12 +31,12 @@ class PreguntaResource(resources.ModelResource):
         model = Pregunta
 
 
-class PreguntaAdm(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('id',)
+# class PreguntaAdm(ImportExportModelAdmin, admin.ModelAdmin):
+#     list_display = ('id',)
 
 
 admin.site.register(Cuestionario, CuestionarioAdmin)
-admin.site.register(Pregunta, PreguntaAdm)
+# admin.site.register(Pregunta, PreguntaAdm)
 
 
 # class ImagenRespuestaAdmin(nested_admin.NestedStackedInline):

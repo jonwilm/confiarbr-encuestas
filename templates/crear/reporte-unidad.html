@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Cuestionario{% endblock title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'libs/bs-stepper/bs-stepper.min.css' %}">
+{% endblock stylesheet %}
+
+{% block css %}
+<style>
+  .item {
+    border: 1px solid var(--bs-primary);
+    border-radius: 1rem;
+  }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h6 class="text-md-center">Crear Reporte</h6>
+      <h3 class="text-md-center">Consorcio: {{ sector.consorcio }}</h3>
+      <h3 class="text-md-center">{{ sector.nombre }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+      <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+
+        {{ unidad_formset.management_form }}
+
+        <div class="item mt-3 py-3 px-3">
+          <div class="mb-3">
+            <label for="id_form-0-unidad"><strong>Unidad</strong></label>
+            <input type="text" name="form-0-unidad" id="id_form-0-unidad" class="form-control" placeholder="Unidad">
+          </div>
+          <div class="mb-3">
+            <label for="id_form-0-observaciones"><strong>Observaciones</strong></label>
+            <textarea name="form-0-observaciones" rows="2" class="form-control" placeholder="Observaciones" style="resize: none;" id="id_form-0-Observaciones"></textarea>
+          </div>
+          <p class="my-3"><strong>Imagen(es)</strong></p>
+          <div class="content-imgfile">
+            <input type="file" capture="camera" name="form-0-imagen1" class="imgfile1 form-control" accept="image/*" id="id_form-0-imagen1">
+            <input type="file" capture="camera" name="form-0-imagen2" class="imgfile2 form-control d-none" accept="image/*" id="id_form-0-imagen2">
+            <input type="file" capture="camera" name="form-0-imagen3" class="imgfile3 form-control d-none" accept="image/*" id="id_form-0-imagen3">
+            <input type="file" capture="camera" name="form-0-imagen4" class="imgfile4 form-control d-none" accept="image/*" id="id_form-0-imagen4">
+          </div>
+          <div class="text-end">
+            <a class="btn btn-primary btn-sm mt-3 ms-auto" onclick="addImg(this)">Agregar imagen</a>
+          </div>
+        </div>
+
+        <div id="btn-guardar" class="d-grid gap-2 mt-3">
+          <button class="btn btn-primary disabled" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+  function addImg(elem) {
+    var totalImgfile = $(elem).parents().siblings('.content-imgfile').children('input')
+    var noImgfile = $(elem).parents().siblings('.content-imgfile').children('input.d-none')
+    var nextImgfile = $(totalImgfile).length - $(noImgfile).length + 1
+    $(elem).parents().siblings('.content-imgfile').children('input.imgfile'+nextImgfile+'').removeClass('d-none')
+    if (nextImgfile == totalImgfile.length) {
+      $(elem).addClass('d-none')
+    }
+  }
+  
+  $('#id_form-0-unidad').change(function() {
+    if($('#id_form-0-unidad').val() == '') {
+      $('#btn-guardar button').addClass('disabled')
+    } else {
+      $('#btn-guardar button').removeClass('disabled')
+    }
+  })
+
+</script>
+{% endblock js %}

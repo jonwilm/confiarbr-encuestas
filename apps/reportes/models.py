@@ -92,6 +92,39 @@ class Respuesta(models.Model):
         return str(self.pregunta.cuestionario)
 
 
+class Unidad(models.Model):
+
+    reporte = models.ForeignKey(
+        Reporte, on_delete=models.CASCADE, verbose_name='reporte'
+    )
+    unidad = models.CharField(
+        'Unidad', max_length=255
+    )
+    observaciones = models.TextField(
+        'Observaciones', blank=True, null=True
+    )
+    imagen1 = models.ImageField(
+        'Imagen 1', upload_to='media/img-unidad', blank=True, null=True
+    )
+    imagen2 = models.ImageField(
+        'Imagen 2', upload_to='media/img-unidad', blank=True, null=True
+    )
+    imagen3 = models.ImageField(
+        'Imagen 3', upload_to='media/img-unidad', blank=True, null=True
+    )
+    imagen4 = models.ImageField(
+        'Imagen 4', upload_to='media/img-unidad', blank=True, null=True
+    )
+
+    class Meta:
+
+        verbose_name = 'Unidad'
+        verbose_name_plural = 'Unidades'
+
+    def __str__(self):
+        return str(self.reporte.nombre)
+
+
 class ImagenRespuesta(models.Model):
 
     respuesta = models.ForeignKey(

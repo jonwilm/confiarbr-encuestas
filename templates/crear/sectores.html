@@ -16,11 +16,15 @@
       <div class="d-grid gap-2">
         
         {% for s in sectores %}
-  
+        
+        {% if s.nombre == 'Unidad' %}
+        <a href="{% url 'reportes_app:reporte-unidad-add' s.slug %}" class="btn btn-outline-primary" type="button">Unidad</a>
+        {% else %}
         <a href="{% url 'reportes_app:reporte-add' s.slug %}" class="btn btn-outline-primary" type="button">{{ s }}</a>
-          
+        {% endif %}
+                
         {% endfor %}
-          
+        
       </div>
     </div>
   </div>

@@ -11,6 +11,11 @@ urlpatterns = [
         name='reporte-add',
     ),
     path(
+        'crear-reporte/<slug:slug>/unidad',
+        views.ReporteUnidadView.as_view(),
+        name='reporte-unidad-add',
+    ),
+    path(
         'reportes/consorcios',
         views.ConsorciosReportes.as_view(),
         name='reportes-consorcios-list',

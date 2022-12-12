@@ -20,8 +20,9 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h6 class="text-center">Crear Reporte</h6>
-      <h3 class="text-center">{{ sector.consorcio }} - {{ sector.nombre }}</h3>
+      <h6 class="text-md-center">Crear Reporte</h6>
+      <h3 class="text-md-center">Consorcio: {{ sector.consorcio }}</h3>
+      <h3 class="text-md-center">Sector: {{ sector.nombre }}</h3>
     </div>
   </div>
   <div class="row">
@@ -45,8 +46,11 @@
           <a id="btn-next" class="btn btn-primary btn-sm mt-3 ms-auto d-none" onclick="nextQuestion()">Siguiente</a>
         </div>
 
-        <div id="btn-guardar" class="d-grid gap-2 mt-3">
-          <button class="btn btn-primary d-none" type="submit">Guardar</button>
+        <div id="btn-guardar" class="d-grid gap-2 mt-3 d-none">
+          <div id="all-required" class="alert alert-danger text-center">
+            las opciones Si/No son requeridas en todas las preguntas.
+          </div>
+          <button class="btn btn-primary disabled" type="submit">Guardar</button>
         </div>
       </form>
     </div>
@@ -74,16 +78,16 @@
   for (let i = 0; i < preguntas.length; i++) {
 
     var inputs = `
-    <div id="item-`+i+`" class="item item-`+i+`-p mt-5 py-3 px-3">
+    <div id="item-`+i+`" class="item item-`+i+`-p mt-3 py-3 px-3">
       <p id="id_pregunta-`+i+`" class=""><strong>`+preguntas[i]+`</strong></p>
       <input type="hidden" name="form-`+i+`-pregunta" class="form-control disabled" id="id_form-`+i+`-pregunta" value="`+preguntas_id[i]+`">
       <div class="mb-3">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="SI">
+          <input class="form-check-input check-resp" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="SI">
           <label class="form-check-label" for="id_form-`+i+`-respuesta">SI</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="NO">
+          <input class="form-check-input check-resp" type="radio" name="form-`+i+`-respuesta" id="id_form-`+i+`-respuesta" value="NO">
           <label class="form-check-label" for="id_form-`+i+`-respuesta">NO</label>
         </div>
       </div>
@@ -118,17 +122,17 @@
   if ($('.item').length == 0) {
     $('#btn-prev').addClass('d-none')
     $('#btn-next').addClass('d-none')
-    $('#btn-guardar button').addClass('d-none')
+    $('#btn-guardar').addClass('d-none')
   }
   if ($('.item').length == 1) {
     $('#btn-prev').addClass('d-none')
     $('#btn-next').addClass('d-none')
-    $('#btn-guardar button').removeClass('d-none')
+    $('#btn-guardar').removeClass('d-none')
   }
   if ($('.item').length > 1) {
     $('#btn-prev').addClass('d-none')
     $('#btn-next').removeClass('d-none')
-    $('#btn-guardar button').addClass('d-none')
+    $('#btn-guardar').addClass('d-none')
   }
 
   $('.item').addClass('d-none')
@@ -142,11 +146,11 @@
     if (preguntaActual == 0) {
       $('#btn-prev').addClass('d-none')
       $('#btn-next').removeClass('d-none')
-      $('#btn-guardar button').removeClass('d-none')
+      $('#btn-guardar').removeClass('d-none')
     }
     if (preguntaActual < preguntas.length) {
       $('#btn-next').removeClass('d-none')
-      $('#btn-guardar button').addClass('d-none')
+      $('#btn-guardar').addClass('d-none')
     }
   }
   
@@ -156,12 +160,19 @@
     $('.item-'+preguntaActual+'-p').removeClass('d-none')
     if (preguntaActual == preguntas.length - 1) {
       $('#btn-next').addClass('d-none')
-      $('#btn-guardar button').removeClass('d-none')
+      $('#btn-guardar').removeClass('d-none')
     }
     if (preguntaActual > 0) {
       $('#btn-prev').removeClass('d-none')
     }
   }
+  
+  $('input.check-resp').change(function() {
+    if($('input.check-resp:checked').length == preguntas.length) {
+      $('#btn-guardar button').removeClass('disabled')
+      $('#all-required').addClass('d-none')
+    }
+  })
 
 </script>
 {% endblock js %}
