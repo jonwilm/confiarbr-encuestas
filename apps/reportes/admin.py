@@ -1,7 +1,7 @@
 from django.contrib import admin
 import nested_admin
 
-from apps.reportes.models import Reporte, Respuesta, Unidad, ImagenRespuesta
+from apps.reportes.models import Reporte, Respuesta, Unidad, Obras, ImagenRespuesta
 
 
 class ImagenRespuestaAdmin(nested_admin.NestedStackedInline):
@@ -20,11 +20,16 @@ class UnidadAdmin(nested_admin.NestedStackedInline):
     extra = 0
 
 
+class ObrasAdmin(nested_admin.NestedStackedInline):
+    model = Obras
+    extra = 0
+
+
 class ReporteAdmin(nested_admin.NestedModelAdmin):
     list_display = ('creacion', 'consorcio', 'sector',)
     exclude = ('nombre', 'slug',)
     list_filter = ('consorcio',)
-    inlines = (RespuestaAdmin, UnidadAdmin)
+    inlines = (RespuestaAdmin, UnidadAdmin, ObrasAdmin)
 
     @admin.display(description='Reporte')
     def get_reporte(self, obj):

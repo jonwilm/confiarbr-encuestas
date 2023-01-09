@@ -36,9 +36,6 @@
 
         <div id="no-q" class="alert alert-info text-center d-none">
           No hay preguntas activas para este sector en esta fecha.
-          <!-- <br>
-          <br>
-          Contacte al administrador. -->
         </div>
 
         <div class="d-flex">
@@ -48,12 +45,15 @@
 
         <div id="btn-guardar" class="d-grid gap-2 mt-3 d-none">
           <div id="all-required" class="alert alert-danger text-center">
-            las opciones Si/No son requeridas en todas las preguntas.
+            Las respuestas Si/No son requeridas en todas las preguntas.
           </div>
           <button class="btn btn-primary disabled" type="submit">Guardar</button>
         </div>
       </form>
     </div>
+  </div>
+  <div class="text-end mt-3">
+    <a class="btn btn-danger" href="javascript:history.back()">Salir</a>
   </div>
 </div>
 {% endblock content %}

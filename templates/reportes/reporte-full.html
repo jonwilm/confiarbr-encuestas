@@ -16,7 +16,8 @@
 </head>
 <body class="py-5">
   <div class="d-grid fixed-top">
-    <button class="btn btn-success btn-sm" onclick="ReportePDF()"><strong>Descargar Reporte</strong></button>
+    <button class="btn btn-success btn-sm d-none" onclick="ReportePDF()"><strong>Descargar Reporte</strong></button>
+    <button class="btn btn-success btn-sm" onclick="ReportePDF2()"><strong>Descargar Reporte 02</strong></button>
   </div>
   <main class="container">
     <div class="d-flex justify-content-between">
@@ -25,9 +26,9 @@
     </div>
     <p class="mt-3 text-end">Señores</p>
     <p class="text-end"><strong>{{ consorcio.nombre }}</strong></p>
-    <p class="text-end mb-5">PRESENTE</p>
+    <p class="text-end mb-3">PRESENTE</p>
     
-    <h2 class="text-center text-uppercase rounded bg-primary bg-gradient text-white p-3 mb-5">Informe de visita<br>{{ fecha|date:'j \d\e F \d\e Y' }}</h2>
+    <h2 class="text-center text-uppercase rounded bg-primary bg-gradient text-white p-3 mb-3">Informe de visita<br>{{ fecha|date:'j \d\e F \d\e Y' }}</h2>
     
     <p class="text-end mb-3">Buenos Aires, {{ fecha|date:'j \d\e F \d\e Y' }}</p>
     
@@ -36,6 +37,11 @@
     <div id="content">
       
       
+    </div>
+    <div id="elementH"></div>
+
+    <div class="text-end mt-3">
+      <a class="btn btn-primary" href="javascript:history.back()">Atrás</a>
     </div>
   </main>
   <script src="{% static 'libs/jquery/jquery-3.6.1.min.js' %}"></script>
@@ -57,13 +63,13 @@
         html2pdf()
         .set({
           margin: 0.5,
-          filename: 'reporte.pdf',
+          filename: '{{ consorcio.slug }}-{{ fecha|date:"d-m-Y" }}.pdf',
           image: {
             type: 'jpeg',
               quality: 0.98
           },
           html2canvas: {
-              scale: 3, // A mayor escala, mejores gráficos, pero más peso
+              scale: 1, // A mayor escala, mejores gráficos, pero más peso
               letterRendering: true,
           },
           jsPDF: {
@@ -75,6 +81,23 @@
         .from(ReportePDF)
         .save()
         .catch(err => console.log(err))
+    }
+  </script>
+  <script src="{% static 'libs/jspdf/jspdf.min.js' %}"></script>
+  <script>
+    function ReportePDF2() {
+      var doc = new jsPDF();
+      doc.fromHTML(
+        $('main').html(),
+        15,
+        15,
+        {
+          'width': 170
+        },
+        function(dispose) {
+          doc.save('{{ consorcio.slug }}-{{ fecha|date:"d-m-Y" }}.pdf')
+        }
+      )
     }
   </script>
 </body>

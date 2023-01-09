@@ -17,10 +17,8 @@ class Consorcio(models.Model):
         verbose_name_plural = 'Consorcios'
 
     def save(self, *args, **kwargs):
+        self.slug = slugify(self.nombre)
         super(Consorcio, self).save(*args, **kwargs)
-        if not self.slug:
-            self.slug = slugify(self.nombre)
-            self.save()
 
     def __str__(self):
         return self.nombre

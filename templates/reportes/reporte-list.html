@@ -33,13 +33,15 @@
         
         {% for r in reportes %}
         
-        <!-- url 'reportes_app:reporte-sectores' slug=consorcio.slug date=r -->
         <a href="{% url 'reportes_app:reporte-sectores' slug=consorcio.slug date=r %}" class="btn btn-outline-primary" type="button">Reporte {{ r|date:'d-M-Y' }}</a>
         
         {% endfor %}
         
       </div>
     </div>
+  </div>
+  <div class="text-end mt-3">
+    <a class="btn btn-primary" href="javascript:history.back()">Atrás</a>
   </div>
 </div>
 {% endblock content %}

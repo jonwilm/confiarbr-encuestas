@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 
 from . import views
 
@@ -7,13 +8,18 @@ app_name = "reportes_app"
 urlpatterns = [
     path(
         'crear-reporte/<slug:slug>/crear',
-        views.ReporteView.as_view(),
+        login_required(views.ReporteView.as_view()),
         name='reporte-add',
     ),
     path(
         'crear-reporte/<slug:slug>/unidad',
-        views.ReporteUnidadView.as_view(),
+        login_required(views.ReporteUnidadView.as_view()),
         name='reporte-unidad-add',
+    ),
+    path(
+        'crear-reporte/<slug:slug>/obra',
+        login_required(views.ReporteObraView.as_view()),
+        name='reporte-obra-add',
     ),
     path(
         'reportes/consorcios',

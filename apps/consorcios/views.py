@@ -1,10 +1,30 @@
+from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic.edit import FormView
+from django.views.generic import ListView, DetailView, TemplateView, View
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
 from .models import Consorcio, Sector
+
+from .forms import LoginForm
 
 
 class Home(TemplateView):
     template_name = "home.html"
+
+
+class LoginView(FormView):
+    template_name = 'login.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        user = authenticate(
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password']
+        )
+        login(self.request, user)
+        return super(LoginView, self).form_valid(form)
 
 
 class Consorcios(ListView):
@@ -32,3 +52,9 @@ class Sectores(DetailView):
             'sectores': sectores,
         }
         return context
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kargs):
+        logout(request)
+        return HttpResponseRedirect(reverse_lazy('consorcios_app:login'))

@@ -30,12 +30,12 @@
       <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
 
-        {{ unidad_formset.management_form }}
+        {{ obras_formset.management_form }}
 
         <div class="item mt-3 py-3 px-3">
           <div class="mb-3">
-            <label for="id_form-0-unidad"><strong>Unidad</strong></label>
-            <input type="text" name="form-0-unidad" id="id_form-0-unidad" class="form-control" placeholder="Unidad">
+            <label for="id_form-0-obra"><strong>Obra en sector común</strong></label>
+            <input type="text" name="form-0-obra" id="id_form-0-obra" class="form-control" placeholder="Obra en sector común">
           </div>
           <div class="mb-3">
             <label for="id_form-0-observaciones"><strong>Observaciones</strong></label>
@@ -77,8 +77,8 @@
     }
   }
   
-  $('#id_form-0-unidad').change(function() {
-    if($('#id_form-0-unidad').val() == '') {
+  $('#id_form-0-obra').change(function() {
+    if($('#id_form-0-obra').val() == '') {
       $('#btn-guardar button').addClass('disabled')
     } else {
       $('#btn-guardar button').removeClass('disabled')

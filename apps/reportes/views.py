@@ -6,9 +6,9 @@ from django.views.generic import ListView, DetailView, TemplateView, View
 
 from apps.consorcios.models import Consorcio, Sector
 from apps.cuestionario.models import Cuestionario, Pregunta
-from .models import Reporte, Respuesta, Unidad, ImagenRespuesta
+from .models import Reporte, Respuesta, Unidad, Obras, ImagenRespuesta
 
-from .forms import ReporteForm, RespuestaForm, RespuestaFormSet, UnidadFormSet, ImagenRespuestaFormSet
+from .forms import ReporteForm, RespuestaForm, RespuestaFormSet, UnidadFormSet, ObrasFormSet, ImagenRespuestaFormSet
 
 from datetime import date
 from django.utils import timezone
@@ -35,6 +35,10 @@ class ReporteView(CreateView):
             cuestionario=cuestionario.pk,
             estado=True,
             prox_visita__lte=timezone.now()
+        ) | Pregunta.objects.filter(
+            cuestionario=cuestionario.pk,
+            estado=True,
+            prox_visita=None
         )
         context['sector'] = sector
         context['preguntas'] = preguntas
@@ -83,7 +87,8 @@ class ReporteView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return str(self.success_url)
+        sector = Sector.objects.get(slug=self.kwargs.get('slug'))
+        return reverse('consorcios_app:sectores-list', kwargs={'slug': sector.consorcio.slug})
 
 
 class ReporteUnidadView(CreateView):
@@ -147,7 +152,73 @@ class ReporteUnidadView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return str(self.success_url)
+        sector = Sector.objects.get(slug=self.kwargs.get('slug'))
+        return reverse('consorcios_app:sectores-list', kwargs={'slug': sector.consorcio.slug})
+
+
+class ReporteObraView(CreateView):
+    model = Reporte
+    form_class = ReporteForm
+    template_name = "crear/obras-sectores-comunes.html"
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug_sector = self.kwargs.get('slug')
+        sector = Sector.objects.get(slug=slug_sector)
+        context['sector'] = sector
+        if "obras_formset" not in context:
+            context['obras_formset'] = ObrasFormSet(
+                queryset=Obras.objects.none(),
+            )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        slug_sector = self.kwargs.get('slug')
+        sector = Sector.objects.get(slug=slug_sector)
+        obras_formset = ObrasFormSet(request.POST, request.FILES)
+        if obras_formset.is_valid() and form.is_valid():
+            return self.form_valid(form, obras_formset, sector)
+        else:
+            return self.form_invalid(form, obras_formset)
+
+    def form_invalid(self, form, obras_formset):
+        return self.render_to_response(
+            self.get_context_data(
+                form=form,
+                obras_formset=obras_formset,
+            )
+        )
+
+    def form_valid(self, form, obras_formset, sector):
+        if Reporte.objects.filter(
+            consorcio=sector.consorcio,
+            sector=sector,
+            creacion=date.today(),
+        ).exists():
+            getReporte = Reporte.objects.get(
+                consorcio=sector.consorcio,
+                sector=sector,
+                creacion=date.today(),
+            )
+            reporte = getReporte
+        else:
+            reporte = form.save(commit=False)
+            reporte.consorcio = sector.consorcio
+            reporte.sector = sector
+            reporte.save()
+        instancesObra = obras_formset.save(commit=False)
+        for instanceObra in instancesObra:
+            if instanceObra.obra != None:
+                instanceObra.reporte = reporte
+                instanceObra.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        sector = Sector.objects.get(slug=self.kwargs.get('slug'))
+        return reverse('consorcios_app:sectores-list', kwargs={'slug': sector.consorcio.slug})
 
 
 class ConsorciosReportes(ListView):
@@ -175,7 +246,6 @@ class ReportesList(DetailView):
             'consorcio': consorcio,
             'reportes': reportes,
         }
-        print(context)
         return context
 
 
@@ -210,12 +280,15 @@ class ReporteDetail(DetailView):
         unidades = Unidad.objects.filter(
             reporte=reporte.pk
         )
+        obras = Obras.objects.filter(
+            reporte=reporte.pk
+        )
         context = {
             'reporte': reporte,
             'respuestas': respuestas,
             'unidades': unidades,
+            'obras': obras,
         }
-        print(respuestas)
         return context
 
 

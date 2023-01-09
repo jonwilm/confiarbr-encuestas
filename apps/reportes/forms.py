@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import modelformset_factory, inlineformset_factory
 
-from .models import Reporte, Respuesta, Unidad, ImagenRespuesta
+from .models import Reporte, Respuesta, Unidad, ImagenRespuesta, Obras
 
 
 class ReporteForm(forms.ModelForm):
@@ -123,6 +123,62 @@ class UnidadForm(forms.ModelForm):
 UnidadFormSet = modelformset_factory(
     Unidad,
     form=UnidadForm,
+    extra=1,
+)
+
+
+class ObrasForm(forms.ModelForm):
+    class Meta:
+        model = Obras
+        fields = [
+            'obra',
+            'observaciones',
+            'imagen1',
+            'imagen2',
+            'imagen3',
+            'imagen4',
+        ]
+        widgets = {
+            'obra': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Obra en sector común',
+                }
+            ),
+            'observaciones': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Observaciones',
+                    'rows': '2',
+                    'style': 'resize: none;'
+                }
+            ),
+            'imagen1': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'imagen2': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'imagen3': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'imagen4': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+        }
+
+
+ObrasFormSet = modelformset_factory(
+    Obras,
+    form=ObrasForm,
     extra=1,
 )
 

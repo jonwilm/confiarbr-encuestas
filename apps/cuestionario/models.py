@@ -32,6 +32,7 @@ class Cuestionario(models.Model):
 
     class Meta:
 
+        unique_together = ['consorcio', 'sector']
         verbose_name = 'Cuestionario'
         verbose_name_plural = 'Cuestionarios'
 
