@@ -3,12 +3,16 @@ from django.urls import reverse
 from django.utils.text import slugify
 from smart_selects.db_fields import ChainedForeignKey
 
+from django.contrib.auth.models import User
 from apps.consorcios.models import Consorcio, Sector
 from apps.cuestionario.models import Pregunta
 
 
 class Reporte(models.Model):
 
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )
     nombre = models.CharField(
         'Reporte', max_length=255
     )

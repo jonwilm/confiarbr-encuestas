@@ -15,10 +15,11 @@
       <img class="img-fluid" src="{% static 'img/logo-reporte.png' %}" style="max-width: 50%;">
       <img class="img-fluid" src="{% static 'img/logo-reporte2.png' %}" style="max-width: 50%;">
     </div>
+    
     <p class="text-end mb-0">Señores</p>
     <p class="text-end mb-0"><strong>{{ reporte.consorcio }}</strong></p>
     <p class="text-end mb-5">PRESENTE</p>
-    
+        
     <h4 class="text-center text-uppercase rounded bg-primary bg-gradient text-white p-3 mb-5">Informe de visita<br>{{ reporte.creacion|date:'j \d\e F \d\e Y' }}</h4>
     
     <p class="text-end mb-3">Buenos Aires, {{ reporte.creacion|date:'j \d\e F \d\e Y' }}</p>

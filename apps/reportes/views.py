@@ -69,6 +69,7 @@ class ReporteView(CreateView):
 
     def form_valid(self, form, respuesta_formset, sector):
         reporte = form.save(commit=False)
+        reporte.user = self.request.user
         reporte.consorcio = sector.consorcio
         reporte.sector = sector
         reporte.save()
@@ -141,6 +142,7 @@ class ReporteUnidadView(CreateView):
             reporte = getReporte
         else:
             reporte = form.save(commit=False)
+            reporte.user = self.request.user
             reporte.consorcio = sector.consorcio
             reporte.sector = sector
             reporte.save()
@@ -206,6 +208,7 @@ class ReporteObraView(CreateView):
             reporte = getReporte
         else:
             reporte = form.save(commit=False)
+            reporte.user = self.request.user
             reporte.consorcio = sector.consorcio
             reporte.sector = sector
             reporte.save()
@@ -306,6 +309,7 @@ class ReporteFull(TemplateView):
             'consorcio': consorcio,
             'reportes': reportes,
             'fecha': reportes[0].creacion,
+            'byuser': reportes[0].user
         }
         return context
 
