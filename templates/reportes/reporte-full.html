@@ -63,9 +63,9 @@
   </script>
   <script src="{% static 'libs/html2pdf/html2pdf.min.js' %}"></script>
   <script>
-    $(window).ready(function() {
+    window.onload = function() {
       $('#download-report').removeClass('d-none')
-    })
+    }
     function ReportePDF() {
       const ReportePDF = document.querySelector('main') // <-- Aquí puedes elegir cualquier elemento del DOM
         html2pdf()
