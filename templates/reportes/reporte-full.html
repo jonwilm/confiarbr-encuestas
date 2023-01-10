@@ -19,7 +19,7 @@
 </head>
 <body class="py-5">
   <div class="d-grid fixed-top">
-    <button class="btn btn-success btn-sm" onclick="ReportePDF()"><strong>Descargar Reporte</strong></button>
+    <button id="download-report" class="btn btn-success btn-sm d-none" onclick="ReportePDF()"><strong>Descargar Reporte</strong></button>
     <button class="btn btn-success btn-sm d-none" onclick="ReportePDF2()"><strong>Descargar Reporte 02</strong></button>
   </div>
   <main class="container">
@@ -63,6 +63,9 @@
   </script>
   <script src="{% static 'libs/html2pdf/html2pdf.min.js' %}"></script>
   <script>
+    $(window).ready(function() {
+      $('#download-report').removeClass('d-none')
+    })
     function ReportePDF() {
       const ReportePDF = document.querySelector('main') // <-- Aquí puedes elegir cualquier elemento del DOM
         html2pdf()
