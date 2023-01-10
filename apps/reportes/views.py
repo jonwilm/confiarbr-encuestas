@@ -243,11 +243,29 @@ class ReportesList(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         consorcio = self.get_object()
-        # reportes = Reporte.objects.filter(consorcio=consorcio.pk)
-        reportes = Reporte.objects.filter(consorcio=consorcio.pk).values_list('creacion', flat=True).distinct()
+        reportesall = Reporte.objects.filter(
+            consorcio=consorcio.pk,
+        ).values_list('creacion', flat=True).distinct()
+        reportes = Reporte.objects.filter(
+            consorcio=consorcio.pk,
+        ).values_list('creacion', flat=True).distinct()
+        filterY = self.request.GET.get('filterY')
+        filterM = self.request.GET.get('filterM')
+        if filterY and not filterM:
+            reportes = Reporte.objects.filter(
+                consorcio=consorcio.pk,
+                creacion__year=filterY,
+            ).values_list('creacion', flat=True).distinct()
+        if filterY and filterM:
+            reportes = Reporte.objects.filter(
+                consorcio=consorcio.pk,
+                creacion__year=filterY,
+                creacion__month=filterM
+            ).values_list('creacion', flat=True).distinct()
         context = {
             'consorcio': consorcio,
             'reportes': reportes,
+            'reportesall': reportesall,
         }
         return context
 

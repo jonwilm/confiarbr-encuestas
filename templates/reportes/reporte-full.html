@@ -11,12 +11,15 @@
   <style>
     p {
       margin: 0;
-    }    
+    }
+    img {
+      break-inside:avoid;
+    }
   </style>
 </head>
 <body class="py-5">
   <div class="d-grid fixed-top">
-    <button class="btn btn-success btn-sm" onclick="ReportePDF()"><strong>Descargar Reporte</strong></button>
+    <button class="btn btn-success btn-sm d-none" onclick="ReportePDF()"><strong>Descargar Reporte</strong></button>
     <button class="btn btn-success btn-sm d-none" onclick="ReportePDF2()"><strong>Descargar Reporte 02</strong></button>
   </div>
   <main class="container">
@@ -42,9 +45,9 @@
     </div>
     <div id="elementH"></div>
 
-    <div class="text-end mt-3">
+    <!-- <div class="text-end mt-3">
       <a class="btn btn-primary" href="javascript:history.back()">Atrás</a>
-    </div>
+    </div> -->
   </main>
   <script src="{% static 'libs/jquery/jquery-3.6.1.min.js' %}"></script>
   <script type="text/javascript">

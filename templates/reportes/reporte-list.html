@@ -20,8 +20,33 @@
       <h1 class="text-center display-6 mb-3">{{ consorcio.nombre }}</h1>
     </div>
   </div>
+
   <div class="row">
     <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+      <form action="{% url 'reportes_app:reportes-list' consorcio.slug %}" method="GET">
+        <div class="input-group">
+          <select class="form-select" id="filterY" name="filterY">
+            <option selected value="">Año</option>
+          </select>
+          <select class="form-select" id="filterM" name="filterM">
+            <option selected value="">Mes</option>
+            <option value="01">Enero</option>
+            <option value="02">Febrero</option>
+            <option value="03">Marzo</option>
+            <option value="04">Abril</option>
+            <option value="05">Mayo</option>
+            <option value="06">Junio</option>
+            <option value="07">Julio</option>
+            <option value="08">Agosto</option>
+            <option value="09">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+        <p class="small">Seleccionar Año y Mes para filtrar</p>
+      </form>
       <div class="d-grid gap-2">
         
         
@@ -47,5 +72,13 @@
 {% endblock content %}
 
 {% block js %}
-
+<script>
+  var anios = []
+  {% for rall in reportesall %}
+    anios.push("{{ rall|date:'Y' }}")
+  {% endfor %}
+  for (let i = 0; i < anios.length; i++) {
+    $('#filterY').append('<option value="'+anios+'">'+anios+'</option>')
+  }
+</script>
 {% endblock js %}
